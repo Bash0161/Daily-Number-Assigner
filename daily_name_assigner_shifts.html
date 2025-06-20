@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Name Assigner</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    textarea { width: 100%; height: 120px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+    pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; }
+    h2 { margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Daily Name Assigner</h1>
+
+  <h3>Earlies (Enter up to 15 names)</h3>
+  <textarea id="earlyInput" placeholder="Enter early shift names..."></textarea>
+
+  <h3>Lates (Enter up to 15 names)</h3>
+  <textarea id="lateInput" placeholder="Enter late shift names..."></textarea>
+
+  <button onclick="assignNames()">Assign Numbers</button>
+
+  <h2>Early Shift Assignments:</h2>
+  <pre id="earlyOutput"></pre>
+
+  <h2>Late Shift Assignments:</h2>
+  <pre id="lateOutput"></pre>
+
+  <script>
+    function assignNames() {
+      const earlyInput = document.getElementById('earlyInput').value.trim();
+      const lateInput = document.getElementById('lateInput').value.trim();
+
+      let earlyNames = earlyInput.split('\n').map(name => name.trim()).filter(name => name);
+      let lateNames = lateInput.split('\n').map(name => name.trim()).filter(name => name);
+
+      if (earlyNames.length < 1 || earlyNames.length > 15) {
+        alert("Please enter between 1 and 15 names for Earlies.");
+        return;
+      }
+
+      if (lateNames.length < 1 || lateNames.length > 15) {
+        alert("Please enter between 1 and 15 names for Lates.");
+        return;
+      }
+
+      // Shuffle arrays
+      earlyNames = shuffle(earlyNames);
+      lateNames = shuffle(lateNames);
+
+      // Assign numbers
+      let earlyOutput = "";
+      earlyNames.forEach((name, i) => {
+        earlyOutput += `${(i+1).toString().padStart(2, '0')}: ${name}\n`;
+      });
+
+      let lateOutput = "";
+      lateNames.forEach((name, i) => {
+        lateOutput += `${(i+16).toString().padStart(2, '0')}: ${name}\n`;
+      });
+
+      document.getElementById('earlyOutput').textContent = earlyOutput;
+      document.getElementById('lateOutput').textContent = lateOutput;
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+  </script>
+</body>
+</html>
